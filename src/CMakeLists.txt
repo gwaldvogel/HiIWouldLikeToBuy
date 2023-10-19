@@ -15,12 +15,12 @@ add_executable(${APP_NAME} ${SOURCES})
 
 target_link_libraries(${APP_NAME}
   PRIVATE
+  fmt::fmt-header-only
   spdlog::spdlog_header_only
   httplib::httplib
   yaml-cpp
   OpenSSL::SSL
-  OpenSSL::Crypto
-  fmt::fmt)
+  OpenSSL::Crypto)
 
 # Enable for easy local testing
 # configure_file("${CMAKE_SOURCE_DIR}/config.yaml" "${CMAKE_CURRENT_BINARY_DIR}/config.yaml" COPYONLY)
