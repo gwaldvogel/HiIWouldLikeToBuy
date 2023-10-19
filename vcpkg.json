@@ -3,6 +3,7 @@
   "dependencies": [
     "gtest",
     "spdlog",
+    "fmt",
     "yaml-cpp",
     "cpp-httplib",
     "openssl"

@@ -19,7 +19,8 @@ target_link_libraries(${APP_NAME}
   httplib::httplib
   yaml-cpp
   OpenSSL::SSL
-  OpenSSL::Crypto)
+  OpenSSL::Crypto
+  fmt::fmt)
 
 # Enable for easy local testing
 # configure_file("${CMAKE_SOURCE_DIR}/config.yaml" "${CMAKE_CURRENT_BINARY_DIR}/config.yaml" COPYONLY)
