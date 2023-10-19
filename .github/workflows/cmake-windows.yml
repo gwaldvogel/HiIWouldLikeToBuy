@@ -14,18 +14,14 @@ env:
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
     - uses: actions/checkout@v3
-    - name: vcpkg-action
-      uses: johnwason/vcpkg-action@v5
+    - uses: friendlyanon/setup-vcpkg@v1
       with:
-        manifest-dir: ${{ github.workspace }}
-        triplet: x64-windows-release
-        token: ${{ github.token }}
-        cache-key: vcpkg-x64-windows-release
+        committish: master
+        cache-key: vcpkg-windows
     - name: Configure CMake
-      run: cmake -GNinja -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-release -DVCPKG_MANIFEST_MODE=OFF -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install/HiIWouldLikeToBuy
+      run: cmake -GNinja -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{env.VCPKG_ROOT}}\scripts\buildsystems\vcpkg.cmake -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install/HiIWouldLikeToBuy
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
     - name: Install
