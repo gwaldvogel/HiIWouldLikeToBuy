@@ -17,3 +17,6 @@ HiIWouldLikeToBuy can notify you when you receive a trade request in Path of Exi
 
 ### Regular Expressions
 This tool uses C++ `std::regex`, which uses regular expressions in ECMAScript flavor. You can test your regular expressions on [regex101.com](https://regex101.com/) by setting the flavor to `ECMAScript (JavaScript)`
+
+## Develop
+Currently this is only tested and built on Windows. If you are interested in another platform please open an issue.
