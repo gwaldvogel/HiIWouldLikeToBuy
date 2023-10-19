@@ -1,6 +1,7 @@
 #pragma once
 
-#include "fmt/format.h"
+#include <fmt/format.h>
+#include <fmt/core.h>
 #include <filesystem>
 #include <functional>
 #include <regex>
@@ -32,7 +33,6 @@ private:
   std::atomic_bool m_keepWatching = true;
   bool m_firstRun = true;
   std::thread m_watcherThread;
-  void saveLastPosition();
   void jumpToEnd();
 };
 
