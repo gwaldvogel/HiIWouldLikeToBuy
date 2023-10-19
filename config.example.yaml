@@ -1,0 +1,7 @@
+logFile: 'C:/POE/logs/Client.txt'
+telegram:
+  botToken: ""
+  chatId: ""
+filter:
+  - "Hi, I'd like to buy.*"
+  - "Hi, I would like to buy.*"

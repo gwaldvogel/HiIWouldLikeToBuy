@@ -1,0 +1,39 @@
+---
+IndentWidth: 2
+ColumnLimit: 140
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Inline
+AlwaysBreakAfterReturnType: None
+BinPackArguments: false
+BreakBeforeBraces: Allman
+BraceWrapping:
+  AfterEnum: true
+  AfterStruct: true
+  SplitEmptyFunction: false
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeLambdaBody: true
+  BeforeWhile: true
+  AfterClass: true
+  AfterControlStatement: Always
+  AfterFunction: true
+  AfterNamespace: true
+  AfterObjCDeclaration: true
+  AfterUnion: true
+  AfterCaseLabel: true
+  AfterExternBlock: true
+  SplitEmptyNamespace: false
+  SplitEmptyRecord: false
+AlignAfterOpenBracket: AlwaysBreak
+BracedInitializerIndentWidth: 2
+BreakConstructorInitializers: BeforeComma
+BreakStringLiterals: true
+IncludeBlocks: Regroup
+PointerAlignment: Left
+SortIncludes: CaseInsensitive
+IncludeCategories:
+  - Regex: '^<(dungeondraft|datatypes).*'
+    Priority: 1
+  - Regex: '.*'
+    Priority: 2
