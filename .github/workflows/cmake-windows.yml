@@ -1,0 +1,64 @@
+# This starter workflow is for a CMake project running on a single platform. There is a different starter workflow if you need cross-platform coverage.
+# See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-multi-platform.yml
+name: Windows
+
+on:
+  push:
+    branches: [ "main" ]
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  BUILD_TYPE: Release
+  USERNAME: gwaldvogel
+  VCPKG_ROOT: C:/vcpkg
+  VCPKG_EXE: C:/vcpkg/vcpkg
+  FEED_URL: https://nuget.pkg.github.com/gwaldvogel/index.json
+  VCPKG_BINARY_SOURCES: "clear;nuget,https://nuget.pkg.github.com/gwaldvogel/index.json,readwrite"
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Add NuGet sources
+      shell: pwsh
+      run: |
+        .$(${{ env.VCPKG_EXE }} fetch nuget) `
+          sources add `
+          -Source "${{ env.FEED_URL }}" `
+          -StorePasswordInClearText `
+          -Name GitHubPackages `
+          -UserName "${{ env.USERNAME }}" `
+          -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
+        .$(${{ env.VCPKG_EXE }} fetch nuget) `
+          setapikey "${{ secrets.GH_PACKAGES_TOKEN }}" `
+          -Source "${{ env.FEED_URL }}"
+
+    - name: Configure CMake
+      shell: cmd
+      run: |
+        call "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+        cmake -GNinja -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{env.VCPKG_ROOT}}\scripts\buildsystems\vcpkg.cmake -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install/HiIWouldLikeToBuy
+    - name: Build
+      shell: cmd
+      run: |
+        call "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+    - name: Install
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target install
+    - name: Package
+      uses: thedoctor0/zip-release@0.7.1
+      if: ${{ startsWith(github.ref, 'refs/tags/') }}
+      with:
+        type: 'zip'
+        filename: 'HiIWouldLikeToBuy-${{github.ref_name}}.zip'
+        path: ${{github.workspace}}/install/
+    - name: Upload Release
+      uses: ncipollo/release-action@v1.12.0
+      if: ${{ startsWith(github.ref, 'refs/tags/') }}
+      with:
+        artifacts: 'HiIWouldLikeToBuy-${{github.ref_name}}.zip'
+        token: ${{ secrets.GITHUB_TOKEN }}

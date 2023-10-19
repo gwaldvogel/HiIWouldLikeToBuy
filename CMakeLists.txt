@@ -3,7 +3,7 @@ project(HiIWouldLikeToBuy)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-enable_testing()
+# enable_testing()
 
 # set(VCPKG_TRACE_FIND_PACKAGE ON)
 

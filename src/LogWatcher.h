@@ -1,6 +1,7 @@
 #pragma once
 
-#include "fmt/format.h"
+#include <fmt/format.h>
+#include <fmt/core.h>
 #include <filesystem>
 #include <functional>
 #include <regex>
@@ -32,20 +33,19 @@ private:
   std::atomic_bool m_keepWatching = true;
   bool m_firstRun = true;
   std::thread m_watcherThread;
-  void saveLastPosition();
   void jumpToEnd();
 };
 
 template <> struct fmt::formatter<LogWatcher::ChatMessage>
 {
-  constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator
+  constexpr auto parse(fmt::format_parse_context& ctx) -> fmt::format_parse_context::iterator
   {
     auto it = ctx.begin();
     if (auto end = ctx.end(); it != end && *it != '}')
-      throw_format_error("invalid format");
+      fmt::throw_format_error("invalid format");
     return it;
   }
-  auto format(const LogWatcher::ChatMessage& msg, format_context& ctx) const -> format_context::iterator
+  auto format(const LogWatcher::ChatMessage& msg, fmt::format_context& ctx) const -> fmt::format_context::iterator
   {
     return fmt::format_to(ctx.out(), "[{}] {}: {}", msg.datetime, msg.author, msg.message);
   }

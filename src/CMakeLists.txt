@@ -15,10 +15,28 @@ add_executable(${APP_NAME} ${SOURCES})
 
 target_link_libraries(${APP_NAME}
   PRIVATE
+  fmt::fmt-header-only
   spdlog::spdlog_header_only
   httplib::httplib
   yaml-cpp
   OpenSSL::SSL
   OpenSSL::Crypto)
 
-configure_file("${CMAKE_SOURCE_DIR}/config.yaml" "${CMAKE_CURRENT_BINARY_DIR}/config.yaml" COPYONLY)
+# Enable for easy local testing
+# configure_file("${CMAKE_SOURCE_DIR}/config.yaml" "${CMAKE_CURRENT_BINARY_DIR}/config.yaml" COPYONLY)
+
+install(TARGETS ${APP_NAME}
+  RUNTIME_DEPENDENCY_SET ${APP_NAME}_RUNTIME_DEPS
+  DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+LIST(APPEND PRE_EXCLUDE_REGEXES "api-ms-.*")
+LIST(APPEND PRE_EXCLUDE_REGEXES "ext-ms-.*")
+LIST(APPEND POST_EXCLUDE_REGEXES ".*Windows[\\/].*")
+
+install(RUNTIME_DEPENDENCY_SET ${APP_NAME}_RUNTIME_DEPS
+  PRE_EXCLUDE_REGEXES ${PRE_EXCLUDE_REGEXES}
+  POST_EXCLUDE_REGEXES ${POST_EXCLUDE_REGEXES}
+  DESTINATION "${CMAKE_INSTALL_PREFIX}")
+
+install(FILES "${CMAKE_SOURCE_DIR}/config.example.yaml"
+  DESTINATION "${CMAKE_INSTALL_PREFIX}")
